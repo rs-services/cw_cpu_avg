@@ -18,7 +18,7 @@ instance_ids=$(echo $instances | jq -r '.Reservations[].Instances[].InstanceId')
 >&2 echo $instance_ids
 
 for instance_id in $instance_ids; do
-  metrics=$(/home/aws/aws/env/bin/aws cloudwatch get-metric-statistics --namespace AWS/EC2 --metric-name CPUUtilization --start-time "$start_time" --end-time "$end_time" --period 1209600 --statistic Average --dimensions Name=InstanceId,Value=$instance_id)
-  avg_cpu=$(echo $metrics | jq '.Datapoints[].Average')
+  metrics=$(/home/aws/aws/env/bin/aws cloudwatch get-metric-statistics --namespace AWS/EC2 --metric-name CPUUtilization --start-time "$start_time" --end-time "$end_time" --period 1209600 --statistic Maximum --dimensions Name=InstanceId,Value=$instance_id)
+  avg_cpu=$(echo $metrics | jq '.Datapoints[].Maximum')
   echo "$instance_id,$avg_cpu"
 done
