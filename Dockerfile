@@ -7,4 +7,4 @@ USER aws
 COPY ./cpuavgs.sh /home/aws/
 
 WORKDIR /home/aws
-CMD ./cpuavgs.sh > /home/aws/output/`date +"%s"`.csv
+CMD for i in `/home/aws/aws/env/bin/aws ec2 describe-regions | jq -r '.Regions[].RegionName'`; do export AWS_DEFAULT_REGION=$i; ./cpuavgs.sh > /home/aws/output/`date +"%F"`-$i.csv; done
